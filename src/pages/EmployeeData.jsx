@@ -4,6 +4,7 @@ import axios from "axios";
 const EmployeeData = () => {
     const [formData, setFormData] = useState({name:"", salary:"", department: ""});
     const [message, setMessage] = useState("");
+    const [messageError, setMessageError] = useState("");
 
     const handleChange = (e)=>{
         setFormData({
@@ -23,12 +24,13 @@ const EmployeeData = () => {
             })
             const data = res.data;
             if (!data.success){
-                setMessage(data.message);
+                setMessageError(data.message);
                 return
             }
             setMessage(data.message);
             setTimeout(()=>{
                 setMessage("");
+                setMessageError("");
             },2000);
         } catch (error) {
             console.log(`Error in creating sending employee data for creation ${error}`);
@@ -38,6 +40,8 @@ const EmployeeData = () => {
     <>
         <div className='flex flex-col gap-2 max-w-2xl mx-auto my-2 p-3'>
             <h1 className='text-center font-semibold text-orange-600 text-2xl mb-4'>Add Employee Data</h1>
+            {message?<p className='text-green-800 text-center'>{message}</p>
+                :messageError?<p className='text-red-800 text-center'>{messageError}</p>:""}
             <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                 <input type='text' placeholder='Enter Employee name...' className='border-2 p-3 rounded-lg text-black'
                     value={formData.name} onChange={handleChange} id="name"   />
