@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import axios from "axios";
 
 const EmployeeData = () => {
     const [formData, setFormData] = useState({name:"", salary:"", department: ""});
+    const [message, setMessage] = useState("");
 
     const handleChange = (e)=>{
         setFormData({
@@ -10,8 +12,27 @@ const EmployeeData = () => {
         })
     }
     console.log(formData);
-    const handleSubmit = (e)=>{
+
+    const handleSubmit = async (e)=>{
         e.preventDefault();
+        try {
+            const res = await axios.post("http://localhost:8000/api/v1/user/create-data",formData, 
+                {headers:{
+                    "Content-Type": "application/json"
+                }
+            })
+            const data = res.data;
+            if (!data.success){
+                setMessage(data.message);
+                return
+            }
+            setMessage(data.message);
+            setTimeout(()=>{
+                setMessage("");
+            },2000);
+        } catch (error) {
+            console.log(`Error in creating sending employee data for creation ${error}`);
+        }
     }
   return (
     <>
