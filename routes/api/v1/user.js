@@ -7,6 +7,6 @@ router.get("/test",(req,res)=>{
     res.status(200).send({message : "The Backend is working!!"})
 } );
 router.post("/create-data", employeeController.createData);
-
+router.get("/get-data", employeeController.getData);
 
 module.exports = router;
